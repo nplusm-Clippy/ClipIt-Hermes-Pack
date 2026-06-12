@@ -51,6 +51,8 @@ Ask your agent:
 
 If it returns your video library, even empty, the connection is working.
 
+**Troubleshooting:** a `401` means the API key was entered incorrectly — re-copy it from ClipIt Settings. A `403` names the missing permission — enable it on the key in **Settings > API Keys**. With the CLI installed, `clipit doctor --json` reports connectivity, auth state, and the active profile in one shot.
+
 ## Works with Any Agent Framework
 
 ### Hermes
@@ -70,16 +72,40 @@ hermes skills install clipper/export-rendering
 
 Add credentials to `~/.hermes/.env` or the equivalent environment file for that runtime.
 
-### Claude Code, Codex, and Other CLI Agents
-
-For the richer native setup path, install the ClipIt CLI:
+### Claude Code
 
 ```bash
 npm install -g @clipit/cli
-clipit agent install <target>
+printf '%s' "$CLIPPER_API_KEY" | clipit auth set-key --stdin
+clipit agent install claude        # writes ~/.claude/skills/clipit-cli/SKILL.md
+clipit videos list                 # verify the account connection
 ```
 
-You can also clone this repository and point your agent at the skill files in `clipper/*/SKILL.md`.
+Or clone this repo — Claude Code reads the root `CLAUDE.md` automatically and discovers every skill in `clipper/*/SKILL.md`.
+
+### Codex (GPT)
+
+```bash
+npm install -g @clipit/cli
+printf '%s' "$CLIPPER_API_KEY" | clipit auth set-key --stdin
+clipit agent install codex         # writes ~/.codex/skills/clipit-cli/SKILL.md
+clipit videos list                 # verify the account connection
+```
+
+Or clone this repo — Codex reads the root `AGENTS.md` automatically.
+
+### OpenClaw and Other CLI Agents
+
+`clipit agent install` accepts ANY framework name; unknown names get the full generic instructions written under `~/.config/clipit/agent-skills/<name>/clipit-cli/`:
+
+```bash
+npm install -g @clipit/cli
+printf '%s' "$CLIPPER_API_KEY" | clipit auth set-key --stdin
+clipit agent install openclaw      # or crewai, langchain, your-framework
+clipit videos list                 # verify the account connection
+```
+
+Point your framework's skill/instructions loader at the generated `SKILL.md`, or clone this repo — frameworks that honor `AGENTS.md` pick it up automatically.
 
 ### Any Agent Using Raw REST
 
