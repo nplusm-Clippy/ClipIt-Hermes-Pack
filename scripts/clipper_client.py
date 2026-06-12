@@ -38,7 +38,7 @@ class ClipperClient:
         self.api_key = api_key or os.environ.get("CLIPPER_API_KEY")
         if not self.api_key:
             raise RuntimeError(
-                "CLIPPER_API_KEY not set. Add it to your Hermes environment "
+                "CLIPPER_API_KEY not set. Add it to your agent's environment "
                 "or pass it explicitly to ClipperClient()."
             )
         self.base_url = (
@@ -49,7 +49,7 @@ class ClipperClient:
         return {
             "X-API-Key": self.api_key,
             "Accept": "application/json",
-            "User-Agent": "ClipperHermesSkills/1.0",
+            "User-Agent": "ClipItAgentPack/1.0",
         }
 
     def _handle_response(self, response: requests.Response) -> Any:
@@ -115,7 +115,7 @@ class ClipperClient:
                 headers={
                     "X-API-Key": self.api_key,
                     "Accept": "application/json",
-                    "User-Agent": "ClipperHermesSkills/1.0",
+                    "User-Agent": "ClipItAgentPack/1.0",
                 },
                 files={field_name: f},
                 timeout=600,
@@ -158,6 +158,46 @@ class ClipperClient:
 
         raise ClipperError(
             500, "JOB_TIMEOUT", f"Job {job_id} did not complete within {timeout}s"
+        )
+
+    def wait_for_export(
+        self,
+        job_id: str,
+        poll_interval: float = 3.0,
+        timeout: float = 600.0,
+        show_progress: bool = True,
+    ) -> Dict[str, Any]:
+        """Poll GET /api/v1/exports/:jobId until status is terminal."""
+        deadline = time.time() + timeout
+        last_progress = -1
+        while time.time() < deadline:
+            job = self.get(f"/api/v1/exports/{job_id}")
+            status = job.get("status")
+            progress = job.get("progress", 0)
+
+            if show_progress and progress != last_progress:
+                print(f"  [{status}] {progress}%", file=sys.stderr)
+                last_progress = progress
+
+            if status == "completed":
+                return job
+            if status in ("failed", "error"):
+                err = job.get("error") or {}
+                if isinstance(err, dict):
+                    raise ClipperError(
+                        status_code=500,
+                        code=err.get("code", "EXPORT_FAILED"),
+                        message=err.get("message", "Export failed"),
+                        details=err,
+                    )
+                raise ClipperError(500, "EXPORT_FAILED", str(err or "Export failed"))
+            if status == "cancelled":
+                raise ClipperError(500, "EXPORT_CANCELLED", "Export was cancelled")
+
+            time.sleep(poll_interval)
+
+        raise ClipperError(
+            500, "EXPORT_TIMEOUT", f"Export {job_id} did not complete within {timeout}s"
         )
 
 

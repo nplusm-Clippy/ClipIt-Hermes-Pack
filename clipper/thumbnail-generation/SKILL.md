@@ -6,6 +6,7 @@ author: nplusm-Clippy
 license: MIT
 platforms: [macos, linux, windows]
 metadata:
+  tags: [Video, ClipIt, Thumbnail, AI, Image Generation, Nano Banana Pro]
   hermes:
     tags: [Video, ClipIt, Thumbnail, AI, Image Generation, Nano Banana Pro]
     requires_toolsets: [terminal]
@@ -26,6 +27,8 @@ Use this skill when the user wants to:
 - Get a specific style, mood, or text overlay on their thumbnail
 
 Powered by Google Nano Banana Pro — supports 4K resolution, accurate text rendering, and reference image composition.
+
+Use the account-insights skill before generation when the user is cost-sensitive: check balance with `get_credits_balance.py` and estimate with `estimate_cost.py` when provider/model metrics are known.
 
 ## Quick Reference
 
@@ -75,7 +78,7 @@ python scripts/generate_thumbnail.py \
 
 ## Pitfalls
 
-- **19.5 $CLIP per generation.** This is the most expensive per-image operation. Don't generate multiple variants unless the user asks.
+- **19.5 $CLIP per generation.** This is the most expensive per-image operation. Check account-insights first and don't generate multiple variants unless the user asks.
 - **Aspect ratio matters.** YouTube thumbnails should be `16:9`, TikTok profile images `1:1`. Default is `16:9`.
 - **Text rendering works but isn't perfect.** Keep text short (1-5 words) for best results. Nano Banana Pro handles text better than most models, but very long text may still have artifacts.
 - **The prompt should describe what you WANT, not what you don't want.** Positive descriptions only.

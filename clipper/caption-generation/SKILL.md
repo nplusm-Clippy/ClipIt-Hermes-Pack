@@ -6,6 +6,7 @@ author: nplusm-Clippy
 license: MIT
 platforms: [macos, linux, windows]
 metadata:
+  tags: [Video, ClipIt, Captions, Subtitles, Styling, Typography]
   hermes:
     tags: [Video, ClipIt, Captions, Subtitles, Styling, Typography]
     requires_toolsets: [terminal]

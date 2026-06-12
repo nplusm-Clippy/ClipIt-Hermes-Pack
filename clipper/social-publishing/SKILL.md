@@ -6,6 +6,7 @@ author: nplusm-Clippy
 license: MIT
 platforms: [macos, linux, windows]
 metadata:
+  tags: [Video, ClipIt, Social Media, TikTok, YouTube, Instagram, Publishing, Scheduling]
   hermes:
     tags: [Video, ClipIt, Social Media, TikTok, YouTube, Instagram, Publishing, Scheduling]
     requires_toolsets: [terminal]
@@ -32,6 +33,8 @@ Use this skill when the user wants to:
 **Prerequisite:** The clip MUST be rendered first (use `render_clip.py --wait` from the clip-creation skill). Social platforms need an actual video file, not just clip metadata.
 
 **Account setup:** Social accounts are connected via the ClipIt web UI (Settings -> Social Accounts). The API cannot connect new accounts — only post through already-connected ones.
+
+Use account-insights before posting to multiple platforms: `get_credits_balance.py` shows available $CLIP and `estimate_cost.py` can preflight known publishing costs.
 
 ## Quick Reference
 
@@ -112,7 +115,7 @@ python scripts/post_to_social.py \
 
 - **Clip MUST be rendered.** The API returns `CLIP_NOT_RENDERED` if you try to post an unrendered clip. Always check with `get_clip.py` first.
 - **YouTube requires `--title`.** If you're posting to YouTube without a title, the API returns 400. Always include `--title` when YouTube is in the platforms list.
-- **65 $CLIP per platform per post.** Posting to 3 platforms costs 195 $CLIP. Confirm with the user before posting to many platforms.
+- **65 $CLIP per platform per post.** Posting to 3 platforms costs 195 $CLIP. Check account-insights and confirm with the user before posting to many platforms.
 - **Scheduled posts aren't free to cancel.** While no credits are charged until the post fires, cancelling at the last second might not work if the post is already in the posting queue.
 - **Platform-specific character limits.** Twitter/X: 280 chars, TikTok: 2200 chars, Instagram: 2200 chars. The API validates these but it's better to respect them upfront.
 - **Social accounts are connected via the web UI only.** You cannot connect a new social account through the API. If the user needs to connect one, direct them to https://clipit.dev/settings/social.

@@ -6,6 +6,7 @@ author: nplusm-Clippy
 license: MIT
 platforms: [macos, linux, windows]
 metadata:
+  tags: [Video, ClipIt, Upload, Import, Transcription, YouTube, Vimeo]
   hermes:
     tags: [Video, ClipIt, Upload, Import, Transcription, YouTube, Vimeo]
     requires_toolsets: [terminal]

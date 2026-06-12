@@ -6,6 +6,7 @@ author: nplusm-Clippy
 license: MIT
 platforms: [macos, linux, windows]
 metadata:
+  tags: [Video, ClipIt, Clips, Render, AI, Viral, TikTok, YouTube Shorts]
   hermes:
     tags: [Video, ClipIt, Clips, Render, AI, Viral, TikTok, YouTube Shorts]
     requires_toolsets: [terminal]
@@ -29,6 +30,8 @@ Use this skill when the user wants to:
 - List or manage existing clips
 
 **Prerequisite:** The video must be imported and transcribed first (use the video-management skill).
+
+**Cost preflight:** For AI suggestions and rendering, use the account-insights skill first: `get_credits_balance.py` to check balance, then `estimate_cost.py` when duration/model metrics are known.
 
 ## Quick Reference
 
@@ -86,10 +89,11 @@ python scripts/create_clip.py --video-id vid_abc123 --start 120.0 --end 155.5 --
 **When to use:** The user wants a downloadable video file. Rendering applies captions, aspect ratio, and quality settings.
 
 **Steps:**
-1. Run `python scripts/render_clip.py --clip-id <id> --aspect-ratio 9:16 --quality high --wait`
-2. Rendering uses AWS Lambda (Remotion) and typically takes 30-120 seconds
-3. On completion, the job result includes the `renderUrl`
-4. To get a fresh download URL: `python scripts/download_clip.py --clip-id <id>`
+1. Check credits with `python scripts/get_credits_balance.py` from account-insights
+2. Run `python scripts/render_clip.py --clip-id <id> --aspect-ratio 9:16 --quality high --wait`
+3. Rendering uses AWS Lambda (Remotion) and typically takes 30-120 seconds
+4. On completion, the job result includes the `renderUrl`
+5. To get a fresh download URL: `python scripts/download_clip.py --clip-id <id>`
 
 **Render options:**
 - `--aspect-ratio` — `16:9` (YouTube), `9:16` (TikTok/Reels), `1:1` (Instagram), `4:5` (Facebook)
@@ -118,7 +122,7 @@ python scripts/render_clip.py --clip-id clip_xyz --aspect-ratio 9:16 --quality h
 - **Rendering takes time.** Use `--wait` to block until done, or poll the returned `jobId`. Don't try to download before rendering completes.
 - **Changing clip timing invalidates the render.** If you update start/end times with `update_clip.py`, the previous render is stale — re-render before downloading.
 - **Download URLs expire.** Each call to `download_clip.py` generates a fresh signed URL. Don't cache them.
-- **Credits vary by render duration and quality.** A 60-second 4K render costs more than a 15-second standard render. Check your balance if doing bulk renders.
+- **Credits vary by render duration and quality.** A 60-second 4K render costs more than a 15-second standard render. Use account-insights before bulk renders.
 
 ## Verification
 

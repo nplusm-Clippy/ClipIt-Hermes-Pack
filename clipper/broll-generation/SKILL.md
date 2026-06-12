@@ -6,6 +6,7 @@ author: nplusm-Clippy
 license: MIT
 platforms: [macos, linux, windows]
 metadata:
+  tags: [Video, ClipIt, B-Roll, AI Video, Flux, Veo, Visual Effects, Overlay]
   hermes:
     tags: [Video, ClipIt, B-Roll, AI Video, Flux, Veo, Visual Effects, Overlay]
     requires_toolsets: [terminal]
@@ -29,7 +30,7 @@ B-Roll is generated in two stages:
 1. **Image generation** (Flux 2 Max) — creates the visual frame(s)
 2. **Video generation** (Veo 3.1) — animates the frame into a 4-8 second video clip
 
-This is the most expensive operation. Plan first, generate only what the user approves.
+This is the most expensive operation. Use account-insights for a balance/cost preflight, plan first, and generate only what the user approves.
 
 ## Quick Reference
 
@@ -42,7 +43,7 @@ This is the most expensive operation. Plan first, generate only what the user ap
 
 ### Planning B-Roll Concepts
 
-**When to use:** The user wants B-Roll ideas before spending credits on generation. Always recommend this step first.
+**When to use:** The user wants B-Roll ideas before spending credits on generation. Always recommend this step first, after checking credits with `get_credits_balance.py`.
 
 **Steps:**
 1. Run `python scripts/plan_broll.py --clip-id <id> --count 3 --wait`
@@ -102,11 +103,11 @@ python scripts/plan_broll.py --clip-id clip_xyz --count 3 --theme "technology" -
 | **Total (typical, single_image, 8s, no audio)** | **~217 $CLIP** |
 | **Total (start_end_frame, 8s, with audio)** | **~434 $CLIP** |
 
-Always plan first and confirm with the user before generating.
+Always plan first, check account-insights, and confirm with the user before generating.
 
 ## Pitfalls
 
-- **This is expensive.** A single B-Roll generation costs 200-400+ $CLIP. Always use `plan_broll.py` first and get user approval before generating.
+- **This is expensive.** A single B-Roll generation costs 200-400+ $CLIP. Always use account-insights and `plan_broll.py` first, then get user approval before generating.
 - **Generation takes 2-4 minutes.** Use `--wait` to block, or poll the jobId. Don't timeout prematurely.
 - **`start_end_frame` mode requires `--end-frame-description`.** Without it, the script will fail.
 - **Keep motion prompts concise.** Veo 3.1 responds best to under 200 characters of motion description.
