@@ -10,7 +10,7 @@ You are working with the ClipIt Agent Pack — skills and Python script bindings
 2. Install script dependencies: `pip install -r requirements.txt`
 3. Verify the account connection: `python scripts/list_videos.py` — any successful response (even an empty list) means you are connected. A `401` means the key is wrong; a `403` names a permission the user must enable on the key in ClipIt Settings.
 
-If Node is available, the richer path is the ClipIt CLI: `npm install -g @clipit/cli`, store the key with `clipit auth set-key --stdin`, then `clipit agent install <your-framework-name>` (any name works) and verify with `clipit videos list`.
+If Node is available, the richer path is the ClipIt CLI: `npm install -g @clipit-ai/cli`, store the key with `clipit auth set-key --stdin`, then `clipit agent install <your-framework-name>` (any name works) and verify with `clipit videos list`.
 
 ## How to work
 
